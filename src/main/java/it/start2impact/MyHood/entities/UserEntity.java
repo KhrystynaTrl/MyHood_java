@@ -21,7 +21,7 @@ public class UserEntity implements UserDetails {
     private String email;
     @Column(name = "password", length = 150, nullable = false)
     private String password;
-    @JoinColumn(name = "location_id")
+    @JoinColumn(name = "location_id", nullable = false)
     @ManyToOne
     private LocationEntity locationEntity;
     @OneToMany(mappedBy = "userEntity")
