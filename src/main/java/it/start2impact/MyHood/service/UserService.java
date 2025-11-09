@@ -34,8 +34,8 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{
+       return userRepository.findByEmail(username).orElseThrow(()-> new UsernameNotFoundException("User not found"));
     }
 
     public UserDto registerUser(UserDto user) throws MyHoodException {
