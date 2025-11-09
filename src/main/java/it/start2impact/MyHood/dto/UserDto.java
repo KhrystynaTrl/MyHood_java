@@ -13,7 +13,7 @@ public class UserDto {
     private String surname;
     @NotBlank(message = "Please insert your email")
     @Size(message = "The length should be less than 30 character", max = 30)
-    @Pattern(regexp = "^[a-zA-Z0-9]+([._-][0-9a-zA-Z]+)*@[a-zA-Z0-9]+([.-][0-9a-zA-Z]+)*\\.[a-zA-Z]{2,}$\n", message = "Please insert a valid email")
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$", message = "Please insert a valid email")
     private String email;
     @NotBlank(message = "Please insert a password")
     private String password;
