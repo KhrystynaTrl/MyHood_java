@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public class PostDto {
+    private Integer id;
     @NotBlank(message = "Please insert a title")
     @Size(message = "The length should be less than 30 character", max = 30)
     private String title;
@@ -16,6 +17,14 @@ public class PostDto {
     private EventType eventType;
 
     public PostDto(){}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -52,7 +61,7 @@ public class PostDto {
     @Override
     public String toString() {
         return "title: " + getTitle() +
-                "date: " + getDate() +
-                "event type: " + getEventType();
+                " date: " + getDate() +
+                " event type: " + getEventType();
     }
 }

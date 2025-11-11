@@ -21,7 +21,7 @@ public class PostEntity {
     @Column(name = "event_type")
     private EventType eventType;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
     public PostEntity(){}

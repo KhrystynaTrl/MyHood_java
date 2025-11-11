@@ -1,19 +1,53 @@
 package it.start2impact.MyHood.service;
 
-import it.start2impact.MyHood.repositories.PostReopository;
+import it.start2impact.MyHood.dto.PostDto;
+import it.start2impact.MyHood.entities.PostEntity;
+import it.start2impact.MyHood.entities.UserEntity;
+import it.start2impact.MyHood.exceptions.NotFoundException;
+import it.start2impact.MyHood.exceptions.UnauthorizedException;
+import it.start2impact.MyHood.mappers.PostMapper;
+import it.start2impact.MyHood.repositories.PostRepository;
+import it.start2impact.MyHood.repositories.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PostService {
     private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
-    private final PostReopository postReopository;
+    private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public PostService(PostReopository postReopository) {
-        this.postReopository = postReopository;
+    public PostService(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+
     }
+
+    public PostDto createPost(PostDto post){
+        PostEntity entity = PostMapper.fromDto(post);
+        return PostMapper.fromEntity(postRepository.save(entity));
+    }
+    public PostDto updatePost(PostDto post, UserEntity user) throws UnauthorizedException, NotFoundException {
+        PostEntity entity = postRepository.findById(post.getId()).orElseThrow(()->new NotFoundException("Post not found"));
+        if(entity.getId().equals(user.getId())){
+            PostEntity postEntityMapped = PostMapper.fromDto(post);
+            postEntityMapped.setId(entity.getId());
+            postEntityMapped.setUserEntity(entity.getUserEntity());
+            return PostMapper.fromEntity(postRepository.save(postEntityMapped));
+        }
+        throw new UnauthorizedException("Only the author of this post can update it");
+
+
+
+
+
+    }
+
+
 }
