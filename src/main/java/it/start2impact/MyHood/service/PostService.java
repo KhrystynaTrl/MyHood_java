@@ -37,7 +37,7 @@ public class PostService {
     }
     public PostDto updatePost(PostDto post, UserEntity user) throws UnauthorizedException, NotFoundException {
         PostEntity entity = postRepository.findById(post.getId()).orElseThrow(()->new NotFoundException("Post not found"));
-        if(entity.getId().equals(user.getId())){
+        if(entity.getUserEntity().getId().equals(user.getId())){
             PostEntity postEntityMapped = PostMapper.fromDto(post);
             postEntityMapped.setId(entity.getId());
             postEntityMapped.setUserEntity(entity.getUserEntity());
