@@ -30,10 +30,12 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto post, Authentication aut){
+    public ResponseEntity<PostDto> createPost(@Valid @RequestBody PostDto post, @AuthenticationPrincipal UserEntity userEntity) throws MyHoodException {
         logger.info("PostController.createPost - {}", post);
-        UserEntity user = (UserEntity) aut.getPrincipal();
-        return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(post));
+        if(userEntity != null ){
+            return ResponseEntity.status(HttpStatus.CREATED).body(postService.createPost(post, userEntity));
+        }
+        throw new UnauthorizedException("Please login");
     }
 
     @PutMapping("/update")

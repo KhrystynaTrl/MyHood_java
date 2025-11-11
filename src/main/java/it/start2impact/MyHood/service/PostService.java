@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -29,9 +30,10 @@ public class PostService {
 
     }
 
-    public PostDto createPost(PostDto post){
+    public PostDto createPost(PostDto post, UserEntity user){
         PostEntity entity = PostMapper.fromDto(post);
-        return PostMapper.fromEntity(postRepository.save(entity));
+        entity.setUserEntity(user);
+        return PostMapper.fromEntity(postRepository.saveAndFlush(entity));
     }
     public PostDto updatePost(PostDto post, UserEntity user) throws UnauthorizedException, NotFoundException {
         PostEntity entity = postRepository.findById(post.getId()).orElseThrow(()->new NotFoundException("Post not found"));

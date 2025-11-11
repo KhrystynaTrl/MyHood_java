@@ -5,13 +5,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class PostDto {
     private Integer id;
     @NotBlank(message = "Please insert a title")
     @Size(message = "The length should be less than 30 character", max = 30)
     private String title;
-    private LocalDate date;
+    private LocalDateTime date;
     @NotBlank(message = "Please insert the content")
     private String content;
     private EventType eventType;
@@ -34,11 +35,11 @@ public class PostDto {
         this.title = title;
     }
 
-    public LocalDate getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
