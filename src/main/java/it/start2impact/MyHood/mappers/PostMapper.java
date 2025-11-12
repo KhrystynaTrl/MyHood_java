@@ -3,6 +3,9 @@ package it.start2impact.MyHood.mappers;
 import it.start2impact.MyHood.dto.PostDto;
 import it.start2impact.MyHood.entities.PostEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PostMapper {
     private PostMapper(){}
 
@@ -22,5 +25,14 @@ public class PostMapper {
         dto.setContent(entity.getContent());
         dto.setEventType(entity.getEventType());
         return dto;
+    }
+
+    public static List<PostDto> fromEntityList(List<PostEntity> entities){
+        List<PostDto> dtos = new ArrayList<>();
+        for(PostEntity entity : entities){
+            PostDto dto = fromEntity(entity);
+            dtos.add(dto);
+        }
+        return dtos;
     }
 }
