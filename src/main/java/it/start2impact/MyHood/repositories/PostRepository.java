@@ -7,12 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<PostEntity, Integer> {
-    @Query("SELECT ALL FROM post WHERE post_date BETWEEN :fromDate AND :toDate;")
-    public List<PostEntity> findByDate(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
+    @Query("SELECT p FROM PostEntity p WHERE postDate BETWEEN :fromDate AND :toDate")
+    List<PostEntity> findByDate(@Param("fromDate") LocalDate fromDate, @Param("toDate") LocalDate toDate);
 }

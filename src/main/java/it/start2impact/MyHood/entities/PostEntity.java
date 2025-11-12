@@ -4,7 +4,6 @@ import it.start2impact.MyHood.enums.EventType;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "post")
@@ -15,7 +14,7 @@ public class PostEntity {
     @Column(name = "title", length = 30, nullable = false)
     private String title;
     @Column(name = "post_date", insertable = false, updatable = false)
-    private LocalDateTime postDate;
+    private LocalDate postDate;
     @Column(name = "content", nullable = false)
     private String content;
     @Enumerated(EnumType.STRING)
@@ -43,11 +42,11 @@ public class PostEntity {
         this.title = title;
     }
 
-    public LocalDateTime getPostDate() {
+    public LocalDate getPostDate() {
         return postDate;
     }
 
-    public void setPostDate(LocalDateTime postDate) {
+    public void setPostDate(LocalDate postDate) {
         this.postDate = postDate;
     }
 

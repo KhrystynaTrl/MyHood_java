@@ -7,18 +7,15 @@ import it.start2impact.MyHood.exceptions.NotFoundException;
 import it.start2impact.MyHood.exceptions.UnauthorizedException;
 import it.start2impact.MyHood.service.PostService;
 import jakarta.validation.Valid;
-import org.apache.coyote.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -72,7 +69,7 @@ public class PostController {
     }
 
     @GetMapping("/find-by-date")
-    public ResponseEntity<List<PostDto>> findByDate(LocalDate fromDate, LocalDate toDate)throws NotFoundException{
+    public ResponseEntity<List<PostDto>> findByDate(@RequestParam(name = "from") LocalDate fromDate, @RequestParam(name = "to") LocalDate toDate)throws NotFoundException{
         logger.info("PostController.findByDate- {} {}", fromDate, toDate);
         List<PostDto> findByDate = postService.findByDate(fromDate,toDate);
         if(!findByDate.isEmpty()){
