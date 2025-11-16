@@ -2,6 +2,7 @@ package it.start2impact.MyHood.repositories;
 
 import it.start2impact.MyHood.entities.LocationEntity;
 import it.start2impact.MyHood.entities.PostEntity;
+import it.start2impact.MyHood.entities.UserEntity;
 import it.start2impact.MyHood.enums.EventType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,6 @@ public interface PostRepository extends JpaRepository<PostEntity, Integer> {
                             @Param("to") LocalDate to,
                             @Param("eventType") EventType eventType,
                             @Param("location") LocationEntity location);
+
+    List<PostEntity> findByUserEntity(UserEntity userEntity);
 }

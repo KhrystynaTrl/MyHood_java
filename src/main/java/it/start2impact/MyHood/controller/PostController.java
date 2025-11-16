@@ -85,4 +85,14 @@ public class PostController {
         List<PostDto> search = postService.search(filterDto);
         return ResponseEntity.status(HttpStatus.OK).body(search);
     }
+
+    @GetMapping("/my-posts")
+    public ResponseEntity<List<PostDto>> findAllOwnPosts(@AuthenticationPrincipal UserEntity userEntity) throws UnauthorizedException {
+        logger.info("PostController.findAllOwnPosts - {}", userEntity);
+        if(userEntity != null){
+            List<PostDto> posts = postService.findAllOwnPosts(userEntity);
+            return ResponseEntity.status(HttpStatus.OK).body(posts);
+        }
+        throw new UnauthorizedException("Please login");
+    }
 }

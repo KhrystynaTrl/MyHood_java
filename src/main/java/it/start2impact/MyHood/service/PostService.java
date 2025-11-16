@@ -32,16 +32,17 @@ public class PostService {
         this.locationRepository = locationRepository;
     }
 
-    public PostDto createPost(PostDto post, UserEntity user){
-        logger.info("PostService.createPost - {} {}",post, user);
+    public PostDto createPost(PostDto post, UserEntity user) {
+        logger.info("PostService.createPost - {} {}", post, user);
         PostEntity entity = PostMapper.fromDto(post);
         entity.setUserEntity(user);
         return PostMapper.fromEntity(postRepository.saveAndFlush(entity));
     }
+
     public PostDto updatePost(PostDto post, UserEntity user) throws MyHoodException {
-        logger.info("PostService.updatePost - {} {}",post, user);
-        PostEntity entity = postRepository.findById(post.getId()).orElseThrow(()->new NotFoundException("Post not found"));
-        if(entity.getUserEntity().getId().equals(user.getId())){
+        logger.info("PostService.updatePost - {} {}", post, user);
+        PostEntity entity = postRepository.findById(post.getId()).orElseThrow(() -> new NotFoundException("Post not found"));
+        if (entity.getUserEntity().getId().equals(user.getId())) {
             PostEntity postEntityMapped = PostMapper.fromDto(post);
             postEntityMapped.setId(entity.getId());
             postEntityMapped.setUserEntity(entity.getUserEntity());
@@ -50,34 +51,33 @@ public class PostService {
         throw new UnauthorizedException("Only the author of this post can update it");
     }
 
-    public void deletePost(int id, UserEntity user) throws MyHoodException{
-        logger.info("PostService.deletePost - {} {}",id, user);
-        PostEntity entity = postRepository.findById(id).orElseThrow(()-> new NotFoundException("Post not found"));
-        if(entity.getUserEntity().getId().equals(user.getId())){
+    public void deletePost(int id, UserEntity user) throws MyHoodException {
+        logger.info("PostService.deletePost - {} {}", id, user);
+        PostEntity entity = postRepository.findById(id).orElseThrow(() -> new NotFoundException("Post not found"));
+        if (entity.getUserEntity().getId().equals(user.getId())) {
             postRepository.deleteById(id);
             return;
         }
         throw new NotFoundException("Post not found");
     }
 
-    public List<PostDto> findAll(){
+    public List<PostDto> findAll() {
         logger.info("PostService.findAll");
         List<PostEntity> allPosts = postRepository.findAll();
         return PostMapper.fromEntityList(allPosts);
     }
 
-    public List<PostDto> findByDate(LocalDate fromDate, LocalDate toDate){
-        logger.info("PostService.findByDate - {} {}",fromDate, toDate);
-        List<PostEntity> entities = postRepository.findByDate(fromDate,toDate);
+    public List<PostDto> findByDate(LocalDate fromDate, LocalDate toDate) {
+        logger.info("PostService.findByDate - {} {}", fromDate, toDate);
+        List<PostEntity> entities = postRepository.findByDate(fromDate, toDate);
         return PostMapper.fromEntityList(entities);
-
     }
 
     public List<PostDto> search(FilterDto filterDto) throws NotFoundException {
         logger.info("PostService.search - {} ", filterDto);
         LocationEntity locationEntity = null;
         if (filterDto.getLocation() != null && !filterDto.getLocation().isEmpty()) {
-            locationEntity = locationRepository.findByLocationIgnoreCase(filterDto.getLocation()).orElseThrow(()-> new NotFoundException("Wrong location"));
+            locationEntity = locationRepository.findByLocationIgnoreCase(filterDto.getLocation()).orElseThrow(() -> new NotFoundException("Wrong location"));
         }
 
         List<PostEntity> posts = postRepository.search(
@@ -86,10 +86,13 @@ public class PostService {
                 filterDto.getEventType(),
                 locationEntity
         );
-
         return PostMapper.fromEntityList(posts);
     }
 
-
+    public List<PostDto> findAllOwnPosts(UserEntity userEntity) {
+        logger.info("PostService.findAllOwnPosts - {}", userEntity);
+        List<PostEntity> userPosts= postRepository.findByUserEntity(userEntity);
+        return PostMapper.fromEntityList(userPosts);
+    }
 
 }
