@@ -1,12 +1,15 @@
 package it.start2impact.MyHood.service;
 
+import it.start2impact.MyHood.dto.FilterDto;
 import it.start2impact.MyHood.dto.PostDto;
+import it.start2impact.MyHood.entities.LocationEntity;
 import it.start2impact.MyHood.entities.PostEntity;
 import it.start2impact.MyHood.entities.UserEntity;
 import it.start2impact.MyHood.exceptions.MyHoodException;
 import it.start2impact.MyHood.exceptions.NotFoundException;
 import it.start2impact.MyHood.exceptions.UnauthorizedException;
 import it.start2impact.MyHood.mappers.PostMapper;
+import it.start2impact.MyHood.repositories.LocationRepository;
 import it.start2impact.MyHood.repositories.PostRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +24,12 @@ public class PostService {
     private static final Logger logger = LoggerFactory.getLogger(PostService.class);
 
     private final PostRepository postRepository;
+    private final LocationRepository locationRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, LocationRepository locationRepository) {
         this.postRepository = postRepository;
-
+        this.locationRepository = locationRepository;
     }
 
     public PostDto createPost(PostDto post, UserEntity user){
@@ -68,5 +72,24 @@ public class PostService {
         return PostMapper.fromEntityList(entities);
 
     }
+
+    public List<PostDto> search(FilterDto filterDto) throws NotFoundException {
+        logger.info("PostService.search - {} ", filterDto);
+        LocationEntity locationEntity = null;
+        if (filterDto.getLocation() != null && !filterDto.getLocation().isEmpty()) {
+            locationEntity = locationRepository.findByLocationIgnoreCase(filterDto.getLocation()).orElseThrow(()-> new NotFoundException("Wrong location"));
+        }
+
+        List<PostEntity> posts = postRepository.search(
+                filterDto.getFrom(),
+                filterDto.getTo(),
+                filterDto.getEventType(),
+                locationEntity
+        );
+
+        return PostMapper.fromEntityList(posts);
+    }
+
+
 
 }

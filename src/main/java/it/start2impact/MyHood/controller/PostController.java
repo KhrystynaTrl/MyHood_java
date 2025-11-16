@@ -1,5 +1,6 @@
 package it.start2impact.MyHood.controller;
 
+import it.start2impact.MyHood.dto.FilterDto;
 import it.start2impact.MyHood.dto.PostDto;
 import it.start2impact.MyHood.entities.UserEntity;
 import it.start2impact.MyHood.exceptions.MyHoodException;
@@ -78,5 +79,10 @@ public class PostController {
         throw new NotFoundException("There are no events available within the selected date range");
     }
 
-
+    @PostMapping("/search")
+    public ResponseEntity<List<PostDto>> search(@RequestBody FilterDto filterDto) throws NotFoundException {
+        logger.info("PostController.search - {}", filterDto);
+        List<PostDto> search = postService.search(filterDto);
+        return ResponseEntity.status(HttpStatus.OK).body(search);
+    }
 }
