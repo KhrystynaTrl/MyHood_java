@@ -2,10 +2,8 @@ package it.start2impact.MyHood.controller;
 
 import it.start2impact.MyHood.dto.UserDto;
 import it.start2impact.MyHood.exceptions.MyHoodException;
-import it.start2impact.MyHood.exceptions.NotFoundException;
 import it.start2impact.MyHood.service.UserService;
 import jakarta.validation.Valid;
-import org.apache.catalina.manager.DummyProxySession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

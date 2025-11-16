@@ -1,10 +1,8 @@
 package it.start2impact.MyHood.config.security;
 
-import io.jsonwebtoken.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -28,7 +26,7 @@ public class SecurityConfig {
         http.csrf(CsrfConfigurer::disable)
                 .cors(CorsConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/post/find-all","/user/register","/login").permitAll()
+                        request.requestMatchers("/user/register","/login","/post/find-all","/post/find-by-date","/post/search","/location/find").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
